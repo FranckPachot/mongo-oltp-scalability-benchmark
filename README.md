@@ -14,7 +14,7 @@ After a while, all connections are available, and the response time is displayed
 
 <img width="1066" height="764" alt="image" src="https://github.com/user-attachments/assets/7f1f38e5-6a38-4a3a-ae58-8a937f6bfe1e" />
 
-The benchmark inserts batches of 10,000 operations into 10 million random accounts, then queries the account with the most recent operation in a specific category. This is a common  OLTP scenario using filtering and pagination. As the collection grows, a complete collection scan would slow down, so secondary indexes are essential. It is created as:
+The benchmark inserts batches of 10,000 operations into 10 million random accounts, then queries the account with the most recent operation in a specific category. This is a common  OLTP scenario using filtering and pagination. As the collection grows, a complete collection scan would slow down, so secondary indexes are essential. It is created according to the MongoDB [ESR guideline](https://www.mongodb.com/docs/manual/tutorial/equality-sort-range-guideline/?utm_campaign=devrel&utm_source=third-party-content&utm_term=franck_pachot&utm_medium=devto&utm_content=mongo-oltp-scalability-benchmark):
 ```
 db.accounts.createIndex({
   "category": 1,
