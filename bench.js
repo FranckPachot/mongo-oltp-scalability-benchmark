@@ -11,7 +11,7 @@ function insert(num) {
     const category = Math.floor(Math.random() * 3);
     const operation = {
       date: new Date(),
-      amount: Math.floor(Math.random() * 1000) + 1,
+      amount: Math.floor(Math.random() * 10000) + 1,
     };
     ops.push({
       updateOne: {
@@ -35,7 +35,7 @@ function query(category) {
    .limit(1);
 }
 
-let time1 = Date.now(); insert(1000);              let time2 = Date.now()
+let time1 = Date.now(); insert(10_000);              let time2 = Date.now()
 let time3 = Date.now(); print(query(1).toArray()); let time4 = Date.now()
 
 const host = db.getMongo()._uri.replace(/^mongodb:\/\/(?:[^@]+@)?([^/]+)\/.*$/, "$1").padEnd(30, ' ');
@@ -45,7 +45,7 @@ const queryTime  = String(time4 - time3).padStart(6, ' ');
 print(`Host: ${host} Insert elapsed: ${insertTime} ms Query elapsed: ${queryTime} ms`);  
 
 
-//print(`Host: ${db.getMongo()._uri.replace(/^mongodb:\/\/(?:[^@]+@)?([^/]+)\/.*$/, "$1")} Insert elapsed: ${time2 - time1} ms Query elapsed: ${time4 - time3} ms`);  
+//print(`Host: ${db.getMongo()._uri.replace(/^mongodb:\/\/(?:[^@]+@)?([^/]+)\/.*$/, "$1")} Batch insert elapsed: ${time2 - time1} ms Query elapsed: ${time4 - time3} ms`);  
 
 
 
