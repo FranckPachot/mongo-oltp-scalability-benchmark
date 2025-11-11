@@ -1,0 +1,38 @@
+services:  
+
+  oracle:  
+    image: container-registry.oracle.com/database/adb-free:latest-23ai  
+    expose:  
+      - 27017
+    environment:  
+      - ADMIN_PASSWORD=MongoDB-emulation-23ai  
+      - WALLET_PASSWORD=MongoDB-emulation-23ai  
+    restart: unless-stopped  
+
+  mongodb:  
+    image: mongodb/mongodb-atlas-local:latest
+    expose:  
+      - 27017
+    #environment:  
+      #- MONGO_INITDB_ROOT_USERNAME=MongoDB  
+      #- MONGO_INITDB_ROOT_PASSWORD=MongoDB  
+    restart: unless-stopped  
+
+  documentdb:  
+    image: ghcr.io/documentdb/documentdb/documentdb-local:latest
+    command: --username xxx --password xxx
+    expose:  
+      - 10260
+
+  bench:  
+    image: alpine/mongosh
+    command: bash /bench.sh
+    volumes:
+     - ./bench.js:/bench.js
+     - ./bench.sh:/bench.sh
+    depends_on:
+     - mongodb
+     - oracle
+     - documentdb
+    restart: unless-stopped  
+  
