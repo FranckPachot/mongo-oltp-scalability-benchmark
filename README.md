@@ -25,6 +25,8 @@ db.accounts.createIndex({
 
 At each iteration, the data size grows. The goal is to verify that the query response time does not increase. 
 
+Note: the numbers in the screenshots are not representative as all databases have been started with their default configuration. You can tune it to compare on your infrastructure.
+
 
 
 
