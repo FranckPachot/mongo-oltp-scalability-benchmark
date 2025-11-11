@@ -8,7 +8,7 @@ Start it as:
 docker compose up bench
 
 ```
-It may take several minutes for Oracle to become available. Watch out for `ORAMLVERSION null` in the container logs.
+It may take several minutes for Oracle to become available. Watch out for `ORAMLVERSION null` in the container logs. MongoDB and PostgreSQL are fast to start.
 
 After a while, all connections are available, and the response time is displayed for each:
 
