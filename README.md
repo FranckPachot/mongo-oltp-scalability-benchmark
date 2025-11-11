@@ -8,7 +8,7 @@ Start it as:
 docker compose up bench
 
 ```
-It may take time for Oracle to become available, as it takes a while to start.
+It may take several minutes for Oracle to become available, watch out for `ORAMLVERSION null` in the container logs.
 
 After a while, all connections are available, and the response time is displayed for each:
 
