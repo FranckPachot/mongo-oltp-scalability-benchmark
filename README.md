@@ -23,9 +23,9 @@ db.accounts.createIndex({
 });
 ```
 
-At each iteration, the data size grows. The goal is to verify that the query response time does not increase. 
+With each iteration, the data size grows. The objective is to ensure that the query response time does not increase. As the dataset grows, the average number of operations per account increases, but distributing the data across 10 million accounts keeps the density low, making it representative of an OLTP query.
 
-<img width="1015" height="868" alt="image" src="https://github.com/user-attachments/assets/a8f9ea2e-37e2-4ccc-9652-bbf264c5e3e4" />
+<img width="1040" height="864" alt="image" src="https://github.com/user-attachments/assets/6739f333-0105-4a70-8320-0f90e80f18a2" />
 
 Note: the numbers in the screenshots are not representative as all databases have been started with their default configuration. You can tune it to compare on your infrastructure.
 
