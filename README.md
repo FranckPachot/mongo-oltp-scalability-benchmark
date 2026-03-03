@@ -30,5 +30,25 @@ With each iteration, the data size grows. The objective is to ensure that the qu
 Note: the numbers in the screenshots are not representative, as all databases have been started with their default configuration. You can tune it to compare on your infrastructure. I recommend testing with replicas for high availability, as that's how OLTP should run.
 
 
+When you have enough data, try a secondary use case that may require fixing some items in the arrays. For example, let's say that the business requires that all amounts lower than 10 must be set to zero for categories higher than 1:
+```
+db.accounts.updateMany(  
+  {  
+    category: { $gt: 1 },  
+    "operations.amount": { $lt: 10 }  
+  },  
+  {  
+    $set: {  
+      "operations.$[op].amount": 0  
+    }  
+  },  
+  {  
+    arrayFilters: [  
+      { "op.amount": { $lt: 10 } }  
+    ]  
+  }  
+);  
 
+```
+In MongoDB, this uses the existing index to find the document to update and updates only the necessary item. Other databases may update all index entries, including those that did not change.
 
