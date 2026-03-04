@@ -1,6 +1,6 @@
 This Docker Compose starts MongoDB, Oracle Database (with MongoDB compatibility through ORDS), and DocumentDB (PostgreSQL with the MongoDB-compatible API)
 
-The script [bench.sh](./bench.sh) runs [bench.js](./bench.js) on each database and shows the elapsed time for a batch insert of documents, and a query (similar to this blog post: [How does it scale?](https://dev.to/franckpachot/how-does-it-scale-the-most-basic-benchmark-on-mongodb-p9b)). The goal is to verify scalability: the query response time remains consistent as the collection grows. Another script `update.sh` can be run to test the response time when updating fields (similar to this other blog post :[Updating "denormalized" aggregates with "duplicates"](https://dev.to/franckpachot/updating-denormalized-aggregates-with-duplicates-mongodb-vs-postgresql-3bi1))
+The script [bench.sh](./bench.sh) runs [bench.js](./bench.js) on each database and shows the elapsed time for a batch insert of documents, and a query (similar to this blog post: [How does it scale?](https://dev.to/franckpachot/how-does-it-scale-the-most-basic-benchmark-on-mongodb-p9b)). The goal is to verify scalability: the query response time remains consistent as the collection grows. Another script `update.sh` can be run to test the response time when updating fields (similar to this other blog post: [Updating "denormalized" aggregates with "duplicates"](https://dev.to/franckpachot/updating-denormalized-aggregates-with-duplicates-mongodb-vs-postgresql-3bi1))
 
 ## Quick start
 
