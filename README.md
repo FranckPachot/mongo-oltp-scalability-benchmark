@@ -11,9 +11,7 @@ docker compose up bench
 
 ```
 
-_Note: For the Oracle Database image, you need to `docker login container-registry.oracle.com` with your Oracle SSO e-mail and secret key you get by logging in to https://container-registry.oracle.com/ and 'Auth Key' in the upper-right menu with your name. If you don't want to run Oracle, remove it from the `docker-compose.yaml` and `bench.sh`_
-
-MongoDB and PostgreSQL are fast to start. It may take several minutes for Oracle to become available. Watch out for `ORAMLVERSION null` in the container logs. 
+_Note: For the Oracle Database image, you need to_ `docker login container-registry.oracle.com` _with your Oracle SSO e-mail and secret key you get by logging in to https://container-registry.oracle.com/ and 'Auth Key' in the upper-right menu with your name. If you don't want to run Oracle, remove it from the `docker-compose.yaml` and `bench.sh`. It may take several minutes for Oracle to become available. Watch out for `ORAMLVERSION null` in the container logs. MongoDB and PostgreSQL are fast to start._
 
 After a while, all connections are available, and the response time is displayed for each:
 
@@ -63,15 +61,21 @@ In MongoDB, this uses the existing index to find the document to update and upda
 You can run it automatically with 
 ```
 
-docker compose run --entrypoint bash bench /update.sh`
+docker compose run --rm --entrypoint bash bench /update.sh
 
 ```
 
+Here is an example:
+
+<img width="860" height="569" alt="image" src="https://github.com/user-attachments/assets/51724e62-ced7-4b3f-beae-7558f81dc53a" />
+
+
+
 ## Why those two queries?
 
-In a data model where application aggregates are stored as documents, you typically see two main types of queries:
-- Compound index used to filter across one-to-many relationships, avoiding filter-join-filter patterns by applying all selective filtering upfront, including pagination.
-- Update queries for duplicated values arising from decoupling aggregates (often called "denormalization").
+In data models where application aggregates are stored as documents, you typically see those two main query patterns:
+- Using compound indexes to filter across one-to-many relationships, avoiding the filter-join-filter patterns of normalized models by applying selective filtering upfront, including pagination.
+- Updating fields in array items across many documents, which is common when duplicated values result from “denormalization”, or simply decoupling [aggregates](https://martinfowler.com/bliki/DDD_Aggregate.html) in Domain-Driven Design.
 
 This small benchmark validates that those two patterns scale when the collection grows.
 
