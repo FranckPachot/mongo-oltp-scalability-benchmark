@@ -1,6 +1,17 @@
-This Docker Compose starts MongoDB, Oracle Database (with MongoDB compatibility through ORDS), and DocumentDB (PostgreSQL with the MongoDB-compatible API)
+This Docker Compose setup starts:
+- MongoDB (the Atlas local image)
+- Oracle Database (with MongoDB compatibility via ORDS)
+- DocumentDB (PostgreSQL with a MongoDB-compatible API)
 
-The script [bench.sh](./bench.sh) runs [bench.js](./bench.js) on each database and shows the elapsed time for a batch insert of documents, and a query (similar to this blog post: [How does it scale?](https://dev.to/franckpachot/how-does-it-scale-the-most-basic-benchmark-on-mongodb-p9b)). The goal is to verify scalability: the query response time remains consistent as the collection grows. Another script `update.sh` can be run to test the response time when updating fields (similar to this other blog post: [Updating "denormalized" aggregates with "duplicates"](https://dev.to/franckpachot/updating-denormalized-aggregates-with-duplicates-mongodb-vs-postgresql-3bi1))
+The `bench.sh` script runs `bench.js` against each database and reports the elapsed time for two operations: 
+ - a batch insert of documents
+ - a typical OLTP query with pagination
+
+This is similar to the benchmark described in this blog post: [How does it scale?](https://dev.to/franckpachot/how-does-it-scale-the-most-basic-benchmark-on-mongodb-p9b)
+
+The goal is to measure scalability: verifying that query response time remains consistent as the collection grows.
+
+Another script, `update.sh`, can be run to measure response time when updating fields, similar to the experiments described in this blog post: [Updating "denormalized" aggregates with "duplicates"](https://dev.to/franckpachot/updating-denormalized-aggregates-with-duplicates-mongodb-vs-postgresql-3bi1).
 
 ## Quick start
 
@@ -36,7 +47,7 @@ Note: the numbers in the screenshots are not representative, as all databases ha
 
 ## Update scalability
 
-When you have enough data, try a secondary use case that may require fixing some items in the arrays. For example, let's say that the business requires that all amounts lower than 10 must be set to zero for categories higher than 1:
+When you have enough data, try a secondary use case. With arrays embedded in documents, you may have to update specific items and fields. For example, let's say that the business requires that all amounts lower than 10 must be set to zero for categories higher than 1:
 ```
 db.accounts.updateMany(  
   {  
@@ -56,9 +67,9 @@ db.accounts.updateMany(
 );  
 
 ```
-In MongoDB, this uses the existing index to find the document to update and updates only the necessary item. Other databases may update all index entries, including those that did not change.
+In MongoDB, this uses the existing index to find the documents to update and, within each document, updates only the necessary item. Other databases may to have update all index entries, including those that did not change.
 
-You can run it automatically with 
+You can run it automatically on the three databases with:
 ```
 
 docker compose run --rm --entrypoint bash bench /update.sh
@@ -73,7 +84,7 @@ Here is an example:
 
 ## Why those two queries?
 
-In data models where application aggregates are stored as documents, you typically see those two main query patterns:
+In data models where application aggregates are stored as documents, you typically see those two query patterns:
 - Using compound indexes to filter across one-to-many relationships, avoiding the filter-join-filter patterns of normalized models by applying selective filtering upfront, including pagination.
 - Updating fields in array items across many documents, which is common when duplicated values result from “denormalization”, or simply decoupling [aggregates](https://martinfowler.com/bliki/DDD_Aggregate.html) in Domain-Driven Design.
 
