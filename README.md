@@ -60,6 +60,13 @@ db.accounts.updateMany(
 ```
 In MongoDB, this uses the existing index to find the document to update and updates only the necessary item. Other databases may update all index entries, including those that did not change.
 
+You can run it automatically with 
+```
+
+docker compose run --entrypoint bash bench /update.sh`
+
+```
+
 ## Why those two queries?
 
 In a data model where application aggregates are stored as documents, you typically see two main types of queries:
