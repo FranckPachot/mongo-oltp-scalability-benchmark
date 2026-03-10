@@ -47,7 +47,7 @@ Note: the numbers in the screenshots are not representative, as all databases ha
 
 ## Update scalability
 
-When you have enough data, try a secondary use case. With arrays embedded in documents, you may have to update specific items and fields. For example, let's say that the business requires that all amounts lower than 10 must be set to zero for categories higher than 1:
+When you have enough data, try a secondary use case. When arrays are embedded in documents, you may need to update specific items and fields. For example, let's say that the business requires that all amounts lower than 10 must be set to zero for categories higher than 1:
 ```
 db.accounts.updateMany(  
   {  
@@ -67,7 +67,7 @@ db.accounts.updateMany(
 );  
 
 ```
-In MongoDB, this uses the existing index to find the documents to update and, within each document, updates only the necessary item. Other databases may to have update all index entries, including those that did not change.
+In MongoDB, this uses the existing index to find the documents to update and, within each document, updates only the necessary item. Other databases may have updated all index entries, including those that did not change.
 
 You can run it automatically on the three databases with:
 ```
@@ -81,7 +81,6 @@ Here is an example:
 <img width="860" height="569" alt="image" src="https://github.com/user-attachments/assets/51724e62-ced7-4b3f-beae-7558f81dc53a" />
 
 
-
 ## Why those two queries?
 
 In data models where application aggregates are stored as documents, you typically see those two query patterns:
@@ -91,3 +90,50 @@ In data models where application aggregates are stored as documents, you typical
 This small benchmark validates that those two patterns scale when the collection grows.
 
 
+## Managed services
+
+You can use `bench.js` to run it directly with a managed service, for example, here is a run on Amazon DocumentDB:
+```
+while true
+do
+ mongosh docdb-2026-03-10-20-05-55.cluster-cywlwrcont2f.us-east-1.docdb.amazonaws.com:27017 --tls --tlsCAFile global-bundle.pem --retryWrites=false --username franck --password xxx mongo-oltp-scalability-benchmark/bench.js
+done
+```
+<img width="1190" height="785" alt="image" src="https://github.com/user-attachments/assets/afe37802-bece-4baf-9231-1e41c8df3c18" />
+This was run on Amazon DocumentDB 8.0 with the Query Planner Version 3:
+```
+  executionStats: {
+    executionSuccess: true,
+    executionTimeMillis: '1532.959',
+    planningTimeMillis: '0.087',
+    executionStages: {
+      stage: 'SUBSCAN',
+      nReturned: '1',
+      executionTimeMillisEstimate: '1532.817',
+      inputStage: {
+        stage: 'LIMIT_SKIP',
+        nReturned: '1',
+        executionTimeMillisEstimate: '1532.794',
+        inputStage: {
+          stage: 'SORT',
+          nReturned: '1',
+          executionTimeMillisEstimate: '1532.792',
+          sortPattern: { 'operations.date': -1 },
+          inputStage: {
+            stage: 'FETCH',
+            nReturned: '309964',
+            executionTimeMillisEstimate: '999.059',
+            inputStage: {
+              stage: 'IXSCAN',
+              nReturned: '325926',
+              executionTimeMillisEstimate: '70.678',
+              indexName: 'category_1_operations.date_1_operations.amount_1',
+              indexCond: { '$and': [ { category: { '$eq': 1 } } ] }
+            }
+          }
+        }
+      }
+    }
+  },
+```
+Here, the index filters on `{ category: 1 }`, but all matching documents are still fetched and sorted for pagination, so response time grows with the collection size.
