@@ -37,15 +37,14 @@ function query(category) {
 
 let time1 = Date.now(); insert(10_000);              let time2 = Date.now()
 let time3 = Date.now(); print(query(1).toArray()); let time4 = Date.now()
+let count = db.accounts.estimatedDocumentCount();
 
 const host = db.getMongo()._uri.replace(/^mongodb:\/\/(?:[^@]+@)?([^/]+)\/.*$/, "$1").padEnd(30, ' ');
 const insertTime = String(time2 - time1).padStart(6, ' ');
 const queryTime  = String(time4 - time3).padStart(6, ' ');  
   
-print(`Host: ${host} Insert elapsed: ${insertTime} ms Query elapsed: ${queryTime} ms`);  
+print(`Host: ${host} Insert elapsed: ${insertTime} ms (${count} docs) Query elapsed: ${queryTime} ms `);
 
-
-//print(`Host: ${db.getMongo()._uri.replace(/^mongodb:\/\/(?:[^@]+@)?([^/]+)\/.*$/, "$1")} Batch insert elapsed: ${time2 - time1} ms Query elapsed: ${time4 - time3} ms`);  
 
 
 
