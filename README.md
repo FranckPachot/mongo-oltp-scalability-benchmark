@@ -17,8 +17,12 @@ Another script, `update.sh`, can be run to measure response time when updating f
 
 Start it as:
 ```
-
-docker compose up bench
+# start the ones you want to test
+docker compose up -d mongodb
+docker compose up -d documentdb
+docker compose up -d oracle
+# run the benchmark on those who are up
+docker compose up bench 2>&1 | grep -v "getaddrinfo ENOTFOUND"
 
 ```
 
