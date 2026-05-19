@@ -1,7 +1,6 @@
 db.accounts.ensureIndex({  
   "category": 1,  
   "operations.date": 1,  
-  "operations.amount": 1  
 });  
 
 function insert(num) {

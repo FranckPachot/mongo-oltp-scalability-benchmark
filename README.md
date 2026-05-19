@@ -39,10 +39,8 @@ The benchmark inserts batches of 10,000 operations into 10 million random accoun
 db.accounts.createIndex({
   "category": 1,
   "operations.date": 1,
-  "operations.amount": 1,
 });
 ```
-
 With each iteration, the data size grows. The objective is to ensure that the query response time does not increase. As the dataset grows, the average number of operations per account increases, but distributing the data across 10 million accounts keeps the density low, making it representative of an OLTP query.
 
 <img width="1015" height="852" alt="image" src="https://github.com/user-attachments/assets/0fedc9e0-fa47-4426-8d1e-ed0ea2fd0869" />
