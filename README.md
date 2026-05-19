@@ -30,7 +30,7 @@ _Note: For the Oracle Database image, you need to_ `docker login container-regis
 
 After a while, all connections are available, and the response time is displayed for each:
 
-<img width="1066" height="764" alt="image" src="https://github.com/user-attachments/assets/7f1f38e5-6a38-4a3a-ae58-8a937f6bfe1e" />
+<img width="905" height="705" alt="image" src="https://github.com/user-attachments/assets/fe556f98-9332-4832-a17f-6da25cf5f67a" />
 
 ## Query scalability
 
@@ -43,7 +43,10 @@ db.accounts.createIndex({
 ```
 With each iteration, the data size grows. The objective is to ensure that the query response time does not increase. As the dataset grows, the average number of operations per account increases, but distributing the data across 10 million accounts keeps the density low, making it representative of an OLTP query.
 
-<img width="1015" height="852" alt="image" src="https://github.com/user-attachments/assets/0fedc9e0-fa47-4426-8d1e-ed0ea2fd0869" />
+<img width="840" height="713" alt="image" src="https://github.com/user-attachments/assets/278e1470-273c-42b6-b821-8ab3d47fe97d" />
+
+
+
 
 Note: the numbers in the screenshots are not representative, as all databases have been started with their default configuration. You can tune it to compare on your infrastructure. I recommend testing with replicas for high availability, as that's how OLTP should run.
 
