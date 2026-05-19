@@ -43,10 +43,8 @@ db.accounts.createIndex({
 ```
 With each iteration, the data size grows. The objective is to ensure that the query response time does not increase. As the dataset grows, the average number of operations per account increases, but distributing the data across 10 million accounts keeps the density low, making it representative of an OLTP query.
 
-<img width="840" height="713" alt="image" src="https://github.com/user-attachments/assets/278e1470-273c-42b6-b821-8ab3d47fe97d" />
-
-
-
+An example after 4 hours running shows that the response time of MongoDB and DocumenDB is still around 5 milliseconds:
+<img width="866" height="782" alt="image" src="https://github.com/user-attachments/assets/a375daf8-fc9d-4a37-8d9d-452b46e5987e" />
 
 Note: the numbers in the screenshots are not representative, as all databases have been started with their default configuration. You can tune it to compare on your infrastructure. I recommend testing with replicas for high availability, as that's how OLTP should run.
 
@@ -83,7 +81,7 @@ docker compose run --rm --entrypoint bash bench /update.sh
 
 Here is an example:
 
-<img width="860" height="569" alt="image" src="https://github.com/user-attachments/assets/51724e62-ced7-4b3f-beae-7558f81dc53a" />
+<img width="865" height="594" alt="image" src="https://github.com/user-attachments/assets/a3a1216e-9f1a-40be-802c-ab2afe63ecd9" />
 
 
 ## Why those two queries?
@@ -92,8 +90,7 @@ In data models where application aggregates are stored as documents, you typical
 - Using compound indexes to filter across one-to-many relationships, avoiding the filter-join-filter patterns of normalized models by applying selective filtering upfront, including pagination.
 - Updating fields in array items across many documents, which is common when duplicated values result from “denormalization”, or simply decoupling [aggregates](https://martinfowler.com/bliki/DDD_Aggregate.html) in Domain-Driven Design.
 
-This small benchmark validates that those two patterns scale when the collection grows.
-
+This small benchmark validates that those two patterns scale when the collection grows in MongoDB and DocumentDB.
 
 ## Managed services
 
@@ -194,7 +191,7 @@ FROM accounts a
 WITH INSERT UPDATE DELETE;
 ```
 
-This doesn't solve the indexing problem, as you have to create one index per table, and anyway, the upsert to add operatios to the account fails:
+This doesn't solve the indexing problem, as you have to create one index per table, and anyway, the upsert to add operations to the account fails:
 ```
 Write Errors: [
   WriteError {
