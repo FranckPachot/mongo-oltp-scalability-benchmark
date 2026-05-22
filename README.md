@@ -1,5 +1,6 @@
 This Docker Compose setup starts:
 - MongoDB (the Atlas local image)
+- Percona Server for MongoDB (fork of MongoDB Community with some extra features)
 - Oracle Database (with MongoDB compatibility via ORDS)
 - DocumentDB (PostgreSQL with a MongoDB-compatible API)
 
@@ -19,6 +20,7 @@ Start it as:
 ```
 # start the ones you want to test
 docker compose up -d mongodb
+docker compose up -d percona
 docker compose up -d documentdb
 docker compose up -d oracle
 # run the benchmark on those who are up
@@ -34,7 +36,7 @@ TARGETS="mongodb documentdb" docker compose up bench 2>&1 | grep -v "getaddrinfo
 The benchmark parameters are also configurable via environment variables:
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `TARGETS` | `mongodb documentdb oracle` | Space-separated list of targets to benchmark |
+| `TARGETS` | `mongodb percona documentdb oracle` | Space-separated list of targets to benchmark |
 | `BATCH_SIZE` | `10000` | Number of operations per insert batch |
 | `ACCOUNT_RANGE` | `10000000` | Range of random account IDs |
 | `CATEGORIES` | `3` | Number of categories |

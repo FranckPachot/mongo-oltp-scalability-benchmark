@@ -18,6 +18,12 @@ services:
       #- MONGO_INITDB_ROOT_PASSWORD=MongoDB  
     restart: unless-stopped  
 
+  percona:  
+    image: percona/percona-server-mongodb:latest
+    expose:  
+      - 27017
+    restart: unless-stopped  
+
   documentdb:  
     image: ghcr.io/documentdb/documentdb/documentdb-local:latest
     command: --username xxx --password xxx
