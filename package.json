@@ -1,0 +1,10 @@
+{
+  "name": "mongo-oltp-scalability-benchmark",
+  "version": "1.0.0",
+  "description": "OLTP scalability benchmark for MongoDB-compatible databases",
+  "scripts": {
+    "bench": "docker compose up bench",
+    "up": "docker compose up -d mongodb documentdb oracle",
+    "down": "docker compose down"
+  }
+}

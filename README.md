@@ -26,7 +26,20 @@ docker compose up bench 2>&1 | grep -v "getaddrinfo ENOTFOUND"
 
 ```
 
-_Note: For the Oracle Database image, you need to_ `docker login container-registry.oracle.com` _with your Oracle SSO e-mail and secret key you get by logging in to https://container-registry.oracle.com/ and 'Auth Key' in the upper-right menu with your name. If you don't want to run Oracle, remove it from the `docker-compose.yaml` and `bench.sh`. It may take several minutes for Oracle to become available. Watch out for `ORAMLVERSION null` in the container logs. MongoDB and PostgreSQL are fast to start._
+You can select which targets to benchmark with the `TARGETS` environment variable (defaults to all three):
+```
+TARGETS="mongodb documentdb" docker compose up bench 2>&1 | grep -v "getaddrinfo ENOTFOUND"
+```
+
+The benchmark parameters are also configurable via environment variables:
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `TARGETS` | `mongodb documentdb oracle` | Space-separated list of targets to benchmark |
+| `BATCH_SIZE` | `10000` | Number of operations per insert batch |
+| `ACCOUNT_RANGE` | `10000000` | Range of random account IDs |
+| `CATEGORIES` | `3` | Number of categories |
+
+_Note: For the Oracle Database image, you need to_ `docker login container-registry.oracle.com` _with your Oracle SSO e-mail and secret key you get by logging in to https://container-registry.oracle.com/ and 'Auth Key' in the upper-right menu with your name. It may take several minutes for Oracle to become available. Watch out for `ORAMLVERSION null` in the container logs. MongoDB and PostgreSQL are fast to start._
 
 After a while, all connections are available, and the response time is displayed for each:
 

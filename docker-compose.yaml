@@ -31,9 +31,5 @@ services:
      - ./bench.js:/bench.js
      - ./bench.sh:/bench.sh
      - ./update.sh:/update.sh
-    depends_on:
-     - mongodb
-     - oracle
-     - documentdb
     restart: unless-stopped  
   
