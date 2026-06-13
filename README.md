@@ -164,6 +164,9 @@ Another example on Azure CosmosDB (Microsoft)
 while true; do cat bench.js ; done | docker compose run --rm bench mongosh 'mongodb+srv://docdb-cluster-20260613-2114.mongocluster.cosmos.azure.com/?authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000&appName=CosmosExplorerTerminal' --username franck --password xxx | grep elapsed
 ```
 
+<img width="1392" height="512" alt="image" src="https://github.com/user-attachments/assets/a88e566f-46b5-41c8-8aeb-7544093f9ae9" />
+<img width="1894" height="759" alt="image" src="https://github.com/user-attachments/assets/e06c9b10-4cea-4a60-83b6-f9a8eb6e0843" />
+
 The execution plan is:
 ```
 [mongos] test> db.getMongo()
