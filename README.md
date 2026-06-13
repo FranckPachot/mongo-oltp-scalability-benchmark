@@ -161,7 +161,7 @@ Here, the index filters on `{ category: 1 }`, but all matching documents are sti
 
 Another example on Azure CosmosDB (Microsoft)
 ```
-while true; do cat bench.js ; done | docker compose run bench mongosh 'mongodb+srv://docdb-cluster-20260613-2114.mongocluster.cosmos.azure.com/?authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000&appName=CosmosExplorerTerminal' --username franck --password xxx | grep elapsed
+while true; do cat bench.js ; done | docker compose run --rm bench mongosh 'mongodb+srv://docdb-cluster-20260613-2114.mongocluster.cosmos.azure.com/?authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000&appName=CosmosExplorerTerminal' --username franck --password xxx | grep elapsed
 ```
 
 The execution plan is:
