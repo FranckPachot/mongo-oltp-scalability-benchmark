@@ -109,7 +109,7 @@ This small benchmark validates that those two patterns scale when the collection
 
 ## Managed services
 
-You can use `bench.js` to run it directly with a managed service, for example, here is a run on Amazon DocumentDB:
+You can use `bench.js` to run it directly with a managed service, for example, here is a run on Amazon DocumentDB (AWS):
 ```
 while true
 do
@@ -158,6 +158,62 @@ This was run on Amazon DocumentDB 8.0 with the Query Planner Version 3:
 ```
 
 Here, the index filters on `{ category: 1 }`, but all matching documents are still fetched and sorted for pagination, so response time grows with the collection size.
+
+Another example on Azure CosmosDB (Microsoft)
+```
+while true; do cat bench.js ; done | docker compose run bench mongosh 'mongodb+srv://docdb-cluster-20260613-2114.mongocluster.cosmos.azure.com/?authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000&appName=CosmosExplorerTerminal' --username franck --password xxx | grep elapsed
+```
+
+The execution plan is:
+```
+[mongos] test> db.getMongo()
+mongodb+srv://<credentials>@docdb-cluster-20260613-2114.mongocluster.cosmos.azure.com/?authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000&appName=CosmosExplorerTerminal
+
+[mongos] test> query(1).explain("executionStats").executionStats;
+{
+  nReturned: 1,
+  executionTimeMillis: 0.063,
+  executionStartAtTimeMillis: 0.063,
+  totalDocsExamined: 1,
+  totalKeysExamined: 1,
+  executionStages: {
+    stage: 'LIMIT',
+    nReturned: 1,
+    executionTimeMillis: 0.063,
+    executionStartAtTimeMillis: 0.063,
+    totalDocsExamined: 1,
+    totalKeysExamined: 1,
+    numBlocksFromCache: 5,
+    inputStage: {
+      stage: 'PROJECT',
+      nReturned: 1,
+      executionTimeMillis: 0.063,
+      executionStartAtTimeMillis: 0.063,
+      totalDocsExamined: 1,
+      totalKeysExamined: 1,
+      numBlocksFromCache: 5,
+      inputStage: {
+        stage: 'FETCH',
+        nReturned: 1,
+        executionTimeMillis: 0.062,
+        executionStartAtTimeMillis: 0.062,
+        totalKeysExamined: 1,
+        numBlocksFromCache: 5,
+        inputStage: {
+          stage: 'IXSCAN',
+          nReturned: 1,
+          executionTimeMillis: 0.062,
+          executionStartAtTimeMillis: 0.062,
+          indexName: 'category_1_operations.date_1',
+          totalKeysExamined: 1,
+          numBlocksFromCache: 5
+        }
+      }
+    }
+  }
+}
+```
+CosmosDB runs on PostgreSQL with the DocumentDB extension and shows optimal execution plan: index scan of the result only, with no additional sort.
 
 ## Duality Views
 
